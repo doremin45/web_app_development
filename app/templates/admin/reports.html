@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">📊 館員專屬報表區</h2>
+</div>
+
+<div class="row">
+    <!-- 低庫存警示 -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow border-0 h-100">
+            <div class="card-header bg-danger bg-opacity-75 text-white py-3">
+                <h5 class="mb-0 fw-bold">⚠️ 庫存過低警示 (低於 3 本)</h5>
+            </div>
+            <div class="card-body p-0">
+                {% if low_inventory_books %}
+                    <div class="list-group list-group-flush rounded-bottom">
+                    {% for book in low_inventory_books %}
+                        <a href="{{ url_for('book.book_details', book_id=book.id) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3">
+                            <div class="fw-medium text-dark">{{ book.title }}</div>
+                            <span class="badge bg-danger rounded-pill px-3">{{ book.inventory }} 本</span>
+                        </a>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="p-4 text-center text-muted">
+                        太棒了！目前所有的書館藏都十分充足，大於或等於 3 本。
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- 讀者進書需求排行榜 -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow border-0 h-100">
+            <div class="card-header bg-success bg-opacity-75 text-white py-3">
+                <h5 class="mb-0 fw-bold">📈 讀者高詢問採購榜</h5>
+            </div>
+            <div class="card-body p-0">
+                {% if requests %}
+                    <div class="list-group list-group-flush rounded-bottom">
+                    {% for req in requests %}
+                        <a href="{{ url_for('book.book_details', book_id=req.book_id) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3">
+                            <div class="fw-medium text-dark">{{ req.title }}</div>
+                            <div>
+                                <span class="badge bg-success rounded-pill px-3 me-2">{{ req.request_count }} 次推薦</span>
+                                <small class="text-muted">前往補期</small>
+                            </div>
+                        </a>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="p-4 text-center text-muted">
+                        目前還沒有學生或讀者提出二度購買或缺貨的補書需求。
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

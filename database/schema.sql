@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS books (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    author TEXT,
+    inventory INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS reviews (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    book_id INTEGER NOT NULL,
+    content TEXT NOT NULL,
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS purchase_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    book_id INTEGER NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE
+);
